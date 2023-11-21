@@ -78,11 +78,6 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
         _stompUri = new Uri(settings.StompUrl);
 
         string stompHost = _stompUri.Host;
-        // Add scheme prefix if not an IP
-        if (Uri.CheckHostName(_stompUri.Host) != UriHostNameType.IPv4 && Uri.CheckHostName(_stompUri.Host) != UriHostNameType.IPv6)
-        {
-            stompHost = _stompUri.Scheme + "://" + stompHost;
-        }
         _c2SimStompClient = new C2SIMClientSTOMPLib(
             _logger,
             new C2SIMClientSTOMPSettings(
