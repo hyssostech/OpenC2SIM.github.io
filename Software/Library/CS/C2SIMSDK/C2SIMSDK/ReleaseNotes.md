@@ -1,5 +1,8 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.14
+* Fixed a bug that caused STOMP connection to fail when domain names were used as the host parameter, instead of IP
+
 ## Version 1.2.13
 * JoinSession() returns just the C2SIMINitializationBody xml content
 * Fixed a bug on STOMP disconnection that happened when the client app did not provide a cancellation token

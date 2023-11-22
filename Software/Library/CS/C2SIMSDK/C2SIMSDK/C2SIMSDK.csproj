@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <Version>1.2.11</Version>
+    <Version>1.2.14</Version>
     <LangVersion>10.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -25,7 +25,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
+      </ItemGroup>
 
   <PropertyGroup> <!-- Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName).xml</DocumentationFile>
@@ -38,7 +38,7 @@
 
   <PropertyGroup>
     <PackageId>HyssosTech.Sdk.C2SIM</PackageId>
-    <Version>1.2.13</Version>
+    <Version>1.2.14</Version>
     <Authors>Hyssos Tech</Authors>
     <Company>Hyssos Tech</Company> 
     <Description>
@@ -51,7 +51,7 @@
     <LicenseFile>LICENSE.md</LicenseFile>
     <ProjectUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</ProjectUrl>
     <PackageTags>C2SIM;C2;Simulators;Simulation;Coalition;Command;Control;Planning;Wargaming;Rehearsal</PackageTags>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText('.\ReleaseNotes.md').TrimEnd())</PackageReleaseNotes>
+    <!--<PackageReleaseNotes>$([System.IO.File]::ReadAllText('.\ReleaseNotes.md').TrimEnd())</PackageReleaseNotes>-->
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/CS/C2SIMSDK/C2SIMSDK</RepositoryUrl>
