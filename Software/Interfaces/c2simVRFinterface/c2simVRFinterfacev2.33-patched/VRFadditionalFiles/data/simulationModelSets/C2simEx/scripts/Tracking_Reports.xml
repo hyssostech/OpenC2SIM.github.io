@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!DOCTYPE boost_serialization>
+<boost_serialization signature="serialization::archive" version="9">
+<DtScriptedTaskMetaData class_id="0" tracking_level="0" version="15">
+	<myScriptId>tracking_reports</myScriptId>
+	<myMenuText>Tracking Reports</myMenuText>
+	<myToolTip></myToolTip>
+	<myMenuIcon></myMenuIcon>
+	<myVersion>1</myVersion>
+	<myScriptEngine>lua</myScriptEngine>
+	<myComments></myComments>
+	<myMenuLocations class_id="1" tracking_level="0" version="0">
+		<count>1</count>
+		<item_version>0</item_version>
+		<item>$(menutext)</item>
+	</myMenuLocations>
+	<myIsSystemScript>1</myIsSystemScript>
+	<myDescription>Sends a tracking report every minute.</myDescription>
+	<myScriptLocation>..\data\simulationModelSets\C2simEx\scripts\\Tracking_Reports.lua</myScriptLocation>
+	<myDirectoryPath></myDirectoryPath>
+	<myEntityTypes>
+		<count>3</count>
+		<item_version>0</item_version>
+		<item>1:1:-1:-1:-1:-1:-1</item>
+		<item>1:2:-1:-1:-1:-1:-1</item>
+		<item>11:1:-1:-1:-1:-1:-1</item>
+	</myEntityTypes>
+	<myVariables>
+		<count>0</count>
+		<item_version>0</item_version>
+	</myVariables>
+	<myScript></myScript>
+	<myActionCategories>Movement</myActionCategories>
+	<myShowInMenu>1</myShowInMenu>
+	<myEncrypted>0</myEncrypted>
+	<myScriptType>3</myScriptType>
+	<myDoctrines></myDoctrines>
+	<myFlags>1</myFlags>
+	<myShowInToolbar>0</myShowInToolbar>
+	<myToolbarLocation></myToolbarLocation>
+	<myExtendedMenuText></myExtendedMenuText>
+	<myShortDescription></myShortDescription>
+	<myUiLayout></myUiLayout>
+	<myAliases class_id="2" tracking_level="0" version="0">
+		<count>1</count>
+		<item_version>0</item_version>
+		<item>tracking_reports</item>
+	</myAliases>
+	<myCanBeExecutedConcurrently>0</myCanBeExecutedConcurrently>
+	<myRespectScriptLocation>0</myRespectScriptLocation>
+	<myShowDescriptionInDialog>0</myShowDescriptionInDialog>
+</DtScriptedTaskMetaData>
+</boost_serialization>
+

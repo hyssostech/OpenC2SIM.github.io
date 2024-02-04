@@ -1,0 +1,76 @@
+;;
+;; File - vrfSim.opd
+;;
+;;
+;; Copyright (c) 2003 MAK Technologies, Inc.
+;; All rights reserved.
+;;
+;; $RCSfile: vrfSim.opd,v $ $Revision: 1.43 $ $State: Exp $
+;;
+;; Default Object Parameters Database
+(parameter-database 
+   (variable-bindings
+      (DtRwString
+         (ui-dir "$(gui-dir)/ui")
+      )		 
+      (DtRwString
+         (data-root "$(opd-dir)/vrfSim")
+      )         
+      (DtRwString
+         (system-dir  "$(opd-dir)/vrfSim/systems")
+      )
+      (DtRwString
+         (object-groups-dir  "$(opd-dir)/objectGroups")
+      )
+      (DtRwString
+         (ammoselect-dir  "$(opd-dir)/vrfSim/ammoselect")
+      )
+      (DtRwString
+         (damage-dir  "$(opd-dir)/vrfSim/damage")
+      )
+      (DtRwString
+         (detection-dir  "$(opd-dir)/vrfSim/detection")
+      )
+      (DtRwString
+         (hit-dir  "$(opd-dir)/vrfSim/hit")
+      )
+      (DtRwString
+         (nav-data-dir "$(opd-dir)/vrfSim/navData")
+      )
+      (DtRwString
+         (platforms-dir  "$(opd-dir)/vrfSim/platforms")
+      )
+      (DtRwString
+         (recycle-bin  "$(opd-dir)/vrfSim/recycledData")
+      )
+      (DtRwString
+         (formation-dir  "$(opd-dir)/vrfSim/formation")
+      )
+      (DtRwString
+         (objectModel-dir  "$(opd-dir)/vrfSim/objectModel")
+      )
+      (DtRwString
+         (signatureRules-dir  "$(opd-dir)/vrfSim/signatureRules")
+      )
+      (DtRwString
+         (taskRules-dir  "$(opd-dir)/vrfSim/taskRules")
+      )
+      (DtRwString
+         (remote-config-dir  "$(opd-dir)/vrfSim/remoteConfigurations")
+      )
+      (DtRwString
+         (scriptedmovement-dir  "$(opd-dir)/scriptedObjectMovement")
+      )
+   )
+   (version  101)
+   (remote-configurations 
+      (remote-configuration 
+         (configuration-path  "$(remote-config-dir)/f18.mtl")
+         (key-name  "f18-config")
+      )
+      (remote-configuration 
+         (configuration-path  "$(remote-config-dir)/mig29.mtl")
+         (key-name  "mig29-config")
+      )
+   )
+)

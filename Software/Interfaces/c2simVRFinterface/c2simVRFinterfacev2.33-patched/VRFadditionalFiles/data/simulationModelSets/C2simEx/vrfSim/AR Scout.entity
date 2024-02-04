@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<simObjects entityVersion="1.0">
+   <simObject objectType="3:11:1:225:14:30:0:1" matchType="3:11:1:225:14:30:0:1" platform="@(platforms-dir)/Aggregate.ope">
+      <bool paramName="IncludeInBVSPCalcs">True</bool>
+      <bool paramName="IsRandomized">False</bool>
+      <bool paramName="allow-aggregation">True</bool>
+      <bool paramName="di-guy-enabled">False</bool>
+      <bool paramName="display-combat-range">True</bool>
+      <bool paramName="gui-can-aggregate">False</bool>
+      <bool paramName="gui-can-create">True</bool>
+      <bool paramName="use-object-geometry">False</bool>
+      <bool paramName="use-random-appearance-upon-creation">True</bool>
+      <bool paramName="use-random-hand-item-upon-creation">True</bool>
+      <bool paramName="use-random-head-upon-creation">False</bool>
+      <componentSystem systemName="aggregated-movement" platform="@(system-dir)\movement\ground-aggregated-movement.sysdef"/>
+      <componentSystem systemName="disaggregated-movement" platform="@(system-dir)\movement\ground-disaggregated-movement.sysdef"/>
+      <formations paramName="formation-list" autoLayout="True">
+         <formation formationName="Line" formationFile="@(formation-dir)/Ar_Plt_US_Line.frm"/>
+         <formation formationName="Column" formationFile="@(formation-dir)/Ar_Plt_US_Column.frm"/>
+         <formation formationName="Wedge" formationFile="@(formation-dir)/Ar_Plt_US_Wedge.frm"/>
+         <formation formationName="Vee" formationFile="@(formation-dir)/Ar_Plt_US_Vee.frm"/>
+      </formations>
+      <objectTypes paramName="additional-match-types">
+         <objectType>3:11:1:225:14:30:0:0</objectType>
+      </objectTypes>
+      <real paramName="combat-range">4000</real>
+      <real paramName="disaggregation-range">4100</real>
+      <real paramName="max-pivot-speed">0.314159265359</real>
+      <real paramName="max-speed">18.05555555556</real>
+      <real paramName="ordered-speed">10</real>
+      <sensorSignatures>
+         <real paramName="infrared-signature">0</real>
+         <real paramName="radar-signature">0</real>
+         <real paramName="visual-signature">0</real>
+      </sensorSignatures>
+      <string paramName="animation"/>
+      <string paramName="character-appearance"/>
+      <string paramName="character-type"/>
+      <string paramName="echelon-level">Plt</string>
+      <string paramName="gui-categories">"3D Model" "Armored" "Ground Vehicle" "Military" "Unit"</string>
+      <string paramName="gui-default-overlay-layer"/>
+      <string paramName="gui-deployable-countries"/>
+      <string paramName="gui-icon-lists"/>
+      <string paramName="gui-keywords"/>
+      <string paramName="gui-label">Armored Scout</string>
+      <string paramName="gui-menu-icon"/>
+      <string paramName="gui-on-palettes">"EntityCreationPalette"</string>
+      <string paramName="gui-unique-id">ModelSet-72986116-AR Scout</string>
+      <string paramName="hand-item"/>
+      <string paramName="head"/>
+      <string paramName="object-geometry-filename"/>
+      <string paramName="short-name">AR Scout</string>
+      <stringList paramName="appearances-for-random-selection"/>
+      <stringList paramName="hand-items-for-random-selection"/>
+      <stringList paramName="heads-for-random-selection"/>
+      <subordinates paramName="subordinates">
+         <subordinate objectType="1:1:1:225:2:1:2:0" headingOffset="0" x="0" y="0" z="0"/>
+         <subordinate objectType="1:1:1:225:2:1:2:0" headingOffset="0" x="0" y="0" z="0"/>
+         <subordinate objectType="1:1:1:225:2:1:2:0" headingOffset="0" x="0" y="0" z="0"/>
+      </subordinates>
+   </simObject>
+</simObjects>

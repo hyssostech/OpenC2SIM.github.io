@@ -1,0 +1,383 @@
+(weapon-M230-chain-gun 
+   (systems 
+      (M230-chain-gun 
+         (variable-bindings 
+            (DtRwString
+               (process-state-name "m2-process-state")
+            )
+            (DtRwReal
+               (default-slew-rate 0.785399)
+            )
+            (DtRwReal
+               (load-ammo-time 0.000000)
+            )
+            (DtRwReal
+               (unload-ammo-time 0.000000)
+            )
+            (DtRwReal
+               (neutral-elevation 0.000000)
+            )
+            (DtRwReal
+               (muzzle-speed 500.000000)
+            )
+            (DtRwInt
+               (rounds-per-detonation 3)
+            )
+            (DtRwInt
+               (rounds-per-trigger-pull 15)
+            )
+            (DtRwInt
+               (rounds-per-magazine 1200)
+            )
+            (DtRwInt
+               (rounds-per-minute 625)
+            )
+            (DtRwReal
+               (extra-time-between-bursts 5.000000)
+            )
+            (DtRwOffsetVector
+               (default-muzzle-offset  0.000000 0.000000 0.000000)
+            )
+            (DtTargetingControlTable
+               (targeting-control-table 
+                  (max-targets 1)
+                  (target-region 
+                     (in-range 
+                        (range 1000.000000)
+                     )
+                  )
+                  (fire-with-spot-report-only False)
+                  (ammunition-list 
+                     (M789-HEDP-30mm 
+                        (amount $num-rounds)
+                     )
+                  )
+                  (entity-target-priorities 
+                     (priority-entry 
+                        (target-type 1 1 -1 9 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 1 -1 8 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 1 -1 7 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 1 -1 6 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 1 -1 -1 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 3 1 -1 -1 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 7 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 64 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 86 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 84 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 61 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                     (priority-entry 
+                        (target-type 1 3 -1 -1 -1 -1 -1)
+                        (priorities "M789-HEDP-30mm")
+                     )
+                  )
+               )
+            )
+            (DtRangeProbabilityTable
+               (hit-probability-table 
+                  (entity-range 
+                     (entity-type 1 1 -1 -1 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 3 1 -1 -1 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.900000)
+                           )
+                           (range  1500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 7 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 64 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 86 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 61 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 -1 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+                  (entity-range 
+                     (entity-type 1 3 -1 84 -1 -1 -1)
+                     (range-determinant 
+                        (step-function 
+                           (range  500.000000
+                              (probability 0.980000)
+                           )
+                           (range  1500.000000
+                              (probability 0.800000)
+                           )
+                           (range  2500.000000
+                              (probability 0.500000)
+                           )
+                           (range  3600.000000
+                              (probability 0.200000)
+                           )
+                        )
+                     )
+                  )
+               )
+            )
+            (DtRwBoolean
+               (fixed-az False)
+            )
+            (DtRwBoolean
+               (return-to-heading-enabled False)
+            )
+            (DtRwString
+               (default-range-name "M230 Chain Gun")
+            )
+            (DtRwReal
+               (default-elevation-rate 0.785398)
+            )
+            (DtRwReal
+               (default-max-elevation 0.000000)
+            )
+            (DtRwReal
+               (default-min-elevation 0.000000)
+            )
+            (DtRwInt
+               (default-rapid-fire-rate 300)
+            )
+            (DtRwInt
+               (default-sustained-rate 100)
+            )
+            (DtRwString
+               (default-slew-group "weapon:M230 Ballistic Gun")
+            )
+            (DtRwString
+               (default-ballistic-gun-group "weapon:M230 Ballistic Gun")
+            )
+         )
+         (system-definition 
+            (filename "$(system-dir)\weapons\templates\mm-gun.template_sysdef")
+         )
+         (is-enabled True)
+         (part-of-roll-up False)
+         (use-parent-system-resource-manager True)
+      )
+   )
+   (connections 
+      (connect system:all M230-chain-gun:all)
+      (connect M230-chain-gun:all system:all)
+   )
+   (resources )
+   (meta-data 
+      (system-name "M230 Chain Gun")
+      (system-description "M230 chain gun, mounted on the AH-64 Apache. Fires High Explosive Dual Purpose rounds that can penetrate 2 inches of armor, and that fragment to kill soft targets. ")
+      (allowed-state-repository-types "ground-vehicle-param" "rotary-wing-entity-param")
+      (system-categories "weapon")
+      (parameter-data-list 
+         (int-parameter-data 
+            (parameter-name "num-rounds")
+            (variable-type "DtRwInt")
+            (display-label "Number of Rounds")
+            (display-units "")
+            (source-units "")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "sum")
+            (default-value 1200)
+         )
+         (real-parameter-data 
+            (parameter-name "slew-rate")
+            (variable-type "DtRwReal")
+            (display-label "Slew Rate")
+            (display-units "degrees-per-second")
+            (source-units "radians-per-second")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "sum")
+            (default-value $default-slew-rate)
+         )
+         (real-parameter-data 
+            (parameter-name "elevation-rate")
+            (variable-type "DtRwReal")
+            (display-label "Elevation Rate")
+            (display-units "degrees-per-second")
+            (source-units "radians-per-second")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "sum")
+            (default-value $default-elevation-rate)
+         )
+         (real-parameter-data 
+            (parameter-name "min-elevation")
+            (variable-type "DtRwReal")
+            (display-label "Minimum Elevation")
+            (display-units "degrees")
+            (source-units "radians")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "sum")
+            (default-value $default-min-elevation)
+         )
+         (real-parameter-data 
+            (parameter-name "max-elevation")
+            (variable-type "DtRwReal")
+            (display-label "Maximum Elevation")
+            (display-units "degrees")
+            (source-units "radians")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "sum")
+            (default-value $default-max-elevation)
+         )
+      )
+      (meta-data-entry-list )
+      (ui-filename "")
+      (promoted-from "..\data\simulationModelSets\EntityLevel\vrfSim\systems\weapons\M230-chain-gun.sysdef")
+      (merge-with-sub-systems True)
+      (only-supports-health-checks )
+   )
+   (compatibility-psr-names )
+)

@@ -1,0 +1,453 @@
+(ground-armor-damage 
+   (systems 
+      (damage-component 
+         (variable-bindings 
+            (DtRwReal
+               (smoke-time 1200.000000)
+            )
+            (DtRwReal
+               (flame-time 600.000000)
+            )
+            (DtRwBoolean
+               (terminate-on-destroy False)
+            )
+            (DtRwExplosionEntrys
+               (explosion-list 
+                  (explosion )
+               )
+            )
+            (string-DtDamageProbabilityTable-map
+               (damage-by-munition-power 
+                  (damage-by-power-entry 
+                     (key "armor-piercing")
+                     (value 
+                        (front 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (left-side 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (right-side 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (top 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (bottom 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (rear 
+                           (angle-of-incidence 
+                              (angle 0.523600)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.047200)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.090000 0.000000)
+                                 )
+                              )
+                           )
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.080000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                     )
+                  )
+                  (damage-by-power-entry 
+                     (key "explosive")
+                     (value 
+                        (front 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                        (left-side 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                        (right-side 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                        (top 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                        (bottom 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                        (rear 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (step-function 
+                                    (round-down 1)
+                                    (power  7.500000
+                                       (catastrophic-kill 0.100000)
+                                    )
+                                    (power  12.500000
+                                       (catastrophic-kill 0.500000)
+                                    )
+                                    (power  20.000000
+                                       (catastrophic-kill 0.670000)
+                                    )
+                                    (power  45.000000
+                                       (catastrophic-kill 0.870000)
+                                    )
+                                    (power  70.000000
+                                       (catastrophic-kill 0.990000)
+                                    )
+                                 )
+                              )
+                           )
+                        )
+                     )
+                  )
+                  (damage-by-power-entry 
+                     (key "kinetic")
+                     (value 
+                        (front 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (left-side 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (right-side 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (top 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (bottom 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                        (rear 
+                           (angle-of-incidence 
+                              (angle 1.570800)
+                              (determinant 
+                                 (coefficients 
+                                    (catastrophic-kill 0.050000 0.000000)
+                                    (firepower-kill 0.080000 0.000000)
+                                    (mobility-kill 0.100000 0.000000)
+                                 )
+                              )
+                           )
+                        )
+                     )
+                  )
+               )
+            )
+         )
+         (system-definition 
+            (filename "$(system-dir)\damage\templates\general-damage-model.template_sysdef")
+         )
+         (is-enabled True)
+         (part-of-roll-up False)
+         (use-parent-system-resource-manager False)
+      )
+   )
+   (resources )
+   (meta-data 
+      (system-name "No Armor")
+      (system-description "Unarmored ground vehicle, such as a civilian vehicle.")
+      (allowed-state-repository-types "ground-vehicle-param" "vrf-object-param")
+      (system-categories "damage")
+      (parameter-data-list 
+         (bool-parameter-data 
+            (parameter-name "explode-when-destroyed")
+            (variable-type "DtRwBoolean")
+            (display-label "Explode When Destroyed")
+            (display-units "")
+            (source-units "")
+            (list-items "")
+            (list-display 0)
+            (allow-edit True)
+            (display-value True)
+            (roll-up-rule "none")
+            (default-value False)
+         )
+      )
+      (meta-data-entry-list )
+      (ui-filename "")
+      (promoted-from "..\data\simulationModelSets\EntityLevel\vrfSim\systems\damage\ground-unarmored.sysdef")
+      (merge-with-sub-systems True)
+      (only-supports-health-checks )
+   )
+   (compatibility-psr-names )
+)

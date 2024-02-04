@@ -1,0 +1,34 @@
+(forces 
+   (force 
+      (force-id 0)
+      (force-name "Unknown")
+      (force-color  255.000000 255.000000 128.000000)
+      (include-in-dialogs False)
+      (hostile-to )
+   )
+   (force 
+      (force-id 1)
+      (force-name "Friendly")
+      (force-color  128.000000 224.000000 255.000000)
+      (include-in-dialogs True)
+      (hostile-to 
+         (force-id 2)
+      )
+   )
+   (force 
+      (force-id 2)
+      (force-name "Opposing")
+      (force-color  255.000000 128.000000 128.000000)
+      (include-in-dialogs True)
+      (hostile-to 
+         (force-id 1)
+      )
+   )
+   (force 
+      (force-id 3)
+      (force-name "Neutral")
+      (force-color  170.000000 255.000000 170.000000)
+      (include-in-dialogs True)
+      (hostile-to )
+   )
+)

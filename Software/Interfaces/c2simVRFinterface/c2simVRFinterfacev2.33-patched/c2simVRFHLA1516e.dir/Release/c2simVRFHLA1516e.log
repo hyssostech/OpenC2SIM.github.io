@@ -1,0 +1,6 @@
+﻿  C2SIMinterface.cpp
+  Unknown compiler version - please run the configure tests and report the results
+     Creating library build64\Release\c2simVRFHLA1516e.lib and object build64\Release\c2simVRFHLA1516e.exp
+  c2simVRFHLA1516e.vcxproj -> C:\Users\PauloBarthelmess\Source\Repos\c2simVRFinterfacev2.33\build64\Release\c2simVRFHLA1516e.exe
+  xcopy "C:\Users\PauloBarthelmess\Source\Repos\c2simVRFinterfacev2.33\build64\Release\c2simVRFHLA1516e.exe" bin64 /y /q
+  1 File(s) copied

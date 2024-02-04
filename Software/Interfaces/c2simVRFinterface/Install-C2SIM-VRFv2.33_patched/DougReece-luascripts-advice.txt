@@ -1,0 +1,62 @@
+ I've attached 6 files; these should be placed in the directory 
+data/simulationModelSets/EntityLevel/scripts.
+The files Tracking_Reports.lua and TrackingReports.xml are replacements for existing files.
+
+The new scripts do the following:
+
+    platform_send_observation is a "background process" that is automatically started on every individual platform and human. It does nothing on forces that are not Friendly (blue).
+    make_c2_reports is a background process that is automatically started on every unit. It does nothing on forces that are not Friendly
+    make_c2_reports gets a list of its subordinates and sends each of them a text message that says "parent", so each subordinate knows who to send reports to. (This information isn't currently available to entities in the Lua API.) This is sent directly to the entity so you shouldn't see it at the C2SIM Interface.
+    When the platform_send_observation script processes the "parent" message, it begins sending text messages to the parent every 10 seconds with information from its sensor contact list. This message is also sent directly, so you shouldn't see it at the C2SIM interface.
+    the make_c2_reports records the information from each contact from each subordinate--it fuses the information perfectly, based on the contact name--and sends out a broadcast OBSERVATION report that the C2SIM Interface can read.
+    The format of the OBSERVATION message is
+    OBSERVATION  "<reporting unit name>" <count> <contact 1 class> <latitude> <longitude> <sim time of last contact>      <contact 2 class> <latitude> ...
+    For example, 
+    OBSERVATION "Inf FT 1" 2 armoredutility  21.293366 -157.863178 238  human  21.293267 -157.863296 204  
+    The class is based on DIS Kind and Category. Possible values that the script recognizes are
+       "tank",
+       "afv",
+       "armoredutility",
+       "spa",
+       "towedarty",
+       "wheeledutility",
+       "trackedutility",
+       "vehicle"
+       "aircraft"
+       "human"
+       "ship"
+    The sim time is seconds since start of simulation.
+    The format of the POSITION report is
+    POSITION :"<reporting unit name>" <latitude> <longitude>
+    For example,
+    POSITION "Inf FT 1" 21.294045 -157.861734
+    I.e., I changed "TRACKING" to "POSITION" to match the wording in the ontology. (You could change the word back in the Tracking script.)
+
+
+
+Doug
+
+More:
+I built some test code in the RCI example on my machine and was able to successfully invoke a scripted task task with the code that you have.  In particular (this is for a test script that takes two parameters, an object and an integer):
+
+   DtScriptedTaskTask task;
+   task.init();
+   // Using a Lua script with ID c2sim_test_script
+   task.setScriptId("c2sim_test_script");
+ 
+   // Assume there is a point already created called "fooPt"
+   DtUUID ptUUID("fooPt");
+   // For a task parameter called controlPoint
+   DtRwObjectName* retPointVar = new DtRwObjectName("controlPoint");
+   retPointVar->setUUID(ptUUID);
+   task.variables().addVariable(retPointVar);
+
+   // For a task parameter called choiceInput
+   DtRwInt* selectVar = new DtRwInt("choiceInput");
+   selectVar->setValue(42);
+   task.variables().addVariable(selectVar);
+
+   // Send this task to an entity already created called "armor1"
+   controller()->sendTaskMsg(DtUUID("armor1"), &task);
+
+

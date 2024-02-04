@@ -1,0 +1,95 @@
+;; Simulation model set file for entity-level simulation.
+;;
+;; Note that all files are relative to the path of this file
+;;
+;; If the menu-file is empty, a menu will be created from the contents of the model-set
+;; file.  If the model-set file is empty, no create menu for entities will be
+;; created
+;;
+;; In order to facilitate creating a new simulation model set, using this as a template
+;; the only variable in the variable-bindings should be the directory the supporting
+;; files are located in.  New copies made from this via the entity editor will use
+;; that variable to set the directory location of the newly created simulation model
+;; set
+(simulation-model-set 
+   (variable-bindings 
+      (DtRwString
+         (model-set-directory "C2simEx")
+      )
+      (DtRwString
+         (opd-dir "$(model-set-directory)")
+      )
+      (DtRwString
+         (gui-dir "$(model-set-directory)/gui")
+      )
+      (DtRwString
+         (ui-dir "$(gui-dir)/ui")
+      )
+      (DtRwString
+         (data-root "$(opd-dir)/vrfSim")
+      )
+      (DtRwString
+         (system-dir "$(opd-dir)/vrfSim/systems")
+      )
+      (DtRwString
+         (object-groups-dir "$(opd-dir)/objectGroups")
+      )
+      (DtRwString
+         (ammoselect-dir "$(opd-dir)/vrfSim/ammoselect")
+      )
+      (DtRwString
+         (damage-dir "$(opd-dir)/vrfSim/damage")
+      )
+      (DtRwString
+         (detection-dir "$(opd-dir)/vrfSim/detection")
+      )
+      (DtRwString
+         (hit-dir "$(opd-dir)/vrfSim/hit")
+      )
+      (DtRwString
+         (platforms-dir "$(opd-dir)/vrfSim/platforms")
+      )
+      (DtRwString
+         (recycle-bin "$(opd-dir)/vrfSim/recycledData")
+      )
+      (DtRwString
+         (formation-dir "$(opd-dir)/vrfSim/formation")
+      )
+      (DtRwString
+         (objectModel-dir "$(opd-dir)/vrfSim/objectModel")
+      )
+      (DtRwString
+         (signatureRules-dir "$(opd-dir)/vrfSim/signatureRules")
+      )
+      (DtRwString
+         (taskRules-dir "$(opd-dir)/vrfSim/taskRules")
+      )
+      (DtRwString
+         (remote-config-dir "$(opd-dir)/vrfSim/remoteConfigurations")
+      )
+      (DtRwString
+         (scriptedmovement-dir "$(opd-dir)/scriptedObjectMovement")
+      )
+      (DtRwString
+         (nav-data-dir "$(opd-dir)/vrfSim/navData")
+      )
+   )
+   (opd-file "$(model-set-directory)\vrfSim.opd")
+   (physical-world "$(model-set-directory)\physicalWorldParams.mtl")
+   (detonation-parameters "$(model-set-directory)\detonationParams.mtl")
+   (detonation-terrain-deform-parameters "")
+   (ammunition-parameters "$(model-set-directory)\ammunitionParams.mtl")
+   (indirect-artillery-types "$(model-set-directory)\indirectArtilleryTypes.mtl")
+   (comm-model-parameters "$(model-set-directory)\commModelParams.mtl")
+   (force-hostilty-file "$(model-set-directory)\forceHostilty.mtl")
+   (scenario-data-file "")
+   (include "..\data\simulationModelSets\EntityLevel.sms")
+   (validator-string "")
+   (simulation-object-group-connection "DIS (7) localhost")
+   (preload-parameters False)
+   (visual-data-in-app-data True)
+   (read-only False)
+   (component-attachment-lists 
+      (file "$(model-set-directory)/extra/componentAttachmentTable.mtl")
+   )
+)
