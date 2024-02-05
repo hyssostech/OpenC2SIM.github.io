@@ -556,9 +556,12 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
         _logger?.LogTrace("Entering method");
         try
         {
-            // TODO: the following can be found in the C2SIM GUI app, but using it results in no messages being received
-            // The default parameter in the GUI is set to ALL, and these are therefore not added
-            //_c2SimStompClient.AddAdvSubscription("protocol = 'C2SIM'"); // "protocol = 'BML'"
+            // Just interested in C2SIM messages - cannot handle BML here
+            _c2SimStompClient.AddAdvSubscription("message-selector = 'C2SIM_Command'");//"protocol = 'SISO-STD-C2SIM'");
+            // _c2SimStompClient.AddAdvSubscription(
+            //     "(message-selector = 'C2SIM_Command') or (message-selector = 'C2SIM_Initialization') or (message-selector = 'C2SIM_Order')"
+            // );
+
             // Connect to the server
             C2SIMSTOMPMessage resp = await _c2SimStompClient.Connect();
             if (resp is null)
@@ -648,9 +651,14 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                     }
                     catch (Exception e)
                     {
+                        // Find the root exception that may be wrapped as it bubbles up
+                        while (e.InnerException != null)
+                        {
+                            e = e.InnerException;
+                        }
                         // May result from message types we are not interested in, so just log
                         string emsg = $"Error processing notification {e.Message}";
-                        _logger?.LogError(e ,emsg);
+                        _logger?.LogError(e, emsg);
                     }
                 }
             }, _cancellationSource.Token);
