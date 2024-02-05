@@ -96,13 +96,16 @@ public class C2SIMSTOMPMessage
             string headerVal = _headers[i].Length > colomnIdx + 1 ? _headers[i].Substring(colomnIdx + 1) : string.Empty; 
             // Some headers may be repeated (e.g. 'destination'). Keeping the latest
             _headerMap[header] = headerVal;
-            // A value of true is used with the particular message Selector for this message
-            // TODO: what can be seen in some of the actual headers are entries where the header _key_ is "true",
-            // for example "true:1636062688801"
-            // This test for headerVal is possibly a mistake
-            if (headerVal.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            // The following java code seems - as the original comment indicates - never to be true
+            // What is seem is a header message-selector: C2SIM_Order or similar now, not "true: <value>"
+            //// A value of true is used with the particular message Selector for this message
+            //// TODO: what can be seen in some of the actual headers are entries where the header _key_ is "true",
+            //// for example "true:1636062688801"
+            //// This test for headerVal is possibly a mistake
+            //// if (headerVal.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            if (header.Equals("message-selector", StringComparison.InvariantCultureIgnoreCase))
             {
-                _messageSelector = header;
+                _messageSelector = headerVal;
             }
         }
         return _messageSelector;
