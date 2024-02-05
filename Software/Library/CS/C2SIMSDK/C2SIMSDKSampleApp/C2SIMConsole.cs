@@ -272,12 +272,24 @@ class C2SIMConsole : BackgroundService
     {
         // Get path from second parameter
         string[] parts = cmd.Split(' ');
-        if (parts.Count() != 3)
+        if (parts.Count() < 3)
         {
             throw new ArgumentException("Expected PUSH init|order|report <path to xml>");
         }
         string msgType = parts[1].Trim();
         string path = parts[2].Trim();
+        // Path may be in quotes
+        if (path.StartsWith("\"") && parts.Count() > 3)
+        {
+            // Append remaining parts - assume they are all part of the path
+            for (int i = 3; i < parts.Count(); i++)
+            {
+                // Append, prefixed with the space that got eaten by split
+                path += " " + parts[i];
+            }
+            // Get rid of the surrounding quotes
+            path = path.Replace("\"", string.Empty);
+        }
         if (!File.Exists(path))
         {
             throw new ArgumentException($"Could find xml file at {path}");
