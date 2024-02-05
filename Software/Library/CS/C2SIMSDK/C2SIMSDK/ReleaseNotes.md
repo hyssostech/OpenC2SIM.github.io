@@ -1,5 +1,9 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.2.15
+* Fixed message-selector extraction (original java code looked for deprecated header name)
+* Parsing quoted paths in sample app
+
 ## Version 1.2.14
 * Fixed a bug that caused STOMP connection to fail when domain names were used as the host parameter, instead of IP
 
