@@ -1,5 +1,8 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.3.0
+* Updated to CWIX2024 schema
+
 ## Version 1.2.15
 * Fixed message-selector extraction (original java code looked for deprecated header name)
 * Parsing quoted paths in sample app

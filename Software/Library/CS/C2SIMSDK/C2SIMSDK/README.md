@@ -8,6 +8,9 @@ The SDK is built on top of generic capabilities offered by a [(ported) Client Li
 [C2SIM GUI Editor code](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Client/C2SIMGUIv2.10.9) 
 use of the [Java C2SIMClientLib](https://github.com/hyssostech/OpenC2SIM.github.io/tree/master/Software/Library/Java/C2SIMClientLib).
 
+NOTE: This SDK tracks the C2SIM standard as it evolves through multiple iterations driven primarily by CWIX. The current version supports the CWIX2024 ontology and schema. 
+Documents complying to the official SISO v1.0.1 can be produced by selecting the appropriate namespace to deserialize messages (see the *C2SIM XSD object serialization* section below for details).  
+
 In a nutshell, the SDK:
 
 - Wraps a series of basic Library Commands required to make a C2SIM server transition to a state where it is ready to accept Initializations, or Orders, or to join an ongoing session
@@ -25,6 +28,7 @@ The [HyssosTeck.Sdk.C2SIM](https://www.nuget.org/packages/HyssosTech.Sdk.C2SIM/)
 * .NET Standard 2.0 - compatible with recent .NET Framework projects
 
 As such, it should be compatible with Windows, macOs and Linux platforms, provided these have the required [.NET Runtime/SDK](https://dotnet.microsoft.com/download/dotnet/6.0) installed
+
 
 ## Quick Start
 
@@ -114,7 +118,7 @@ The SDK includes classes for schema versions 1.0.0/1/2. These classes were gener
 ```
 xsd schemas\C2SIM_SMX_LOX_v1.0.0.xsd /c /l:CS /n:C2SIM.Schema100
 xsd schemas\C2SIM_SMX_LOX_v1.0.1.xsd /c /l:CS /n:C2SIM.Schema101
-xsd schemas\C2SIM_SMX_LOX_CWIX2023v1.0.2.xsd /c /l:CS /n:C2SIM.Schema102
+xsd schemas\C2SIM_SMX_LOX_CWIX2024.xsd /c /l:CS /n:C2SIM.Schema102
 ```
 
 ### Messages returned by the server as response to commands
@@ -180,7 +184,7 @@ string xmlOrder = C2SIMSDK.FromC2SIMObject<C2SIM.Schema100.OrderBodyType>(orderO
 // If using v1.0.1
 string xmlOrder = C2SIMSDK.FromC2SIMObject<C2SIM.Schema101.OrderBodyType>(orderObject);
 ...
-// If using v1.0.2
+// If using v1.0.2 - CWIX2024 version
 string xmlOrder = C2SIMSDK.FromC2SIMObject<C2SIM.Schema102.OrderBodyType>(orderObject);
 ```
 
@@ -200,7 +204,7 @@ var orderObject  = C2SIMSDK.ToC2SIMObject<C2SIM.Schema100.OrderBodyType>(e.Body)
 // If using v1.0.1
 var orderObject = C2SIMSDK.ToC2SIMObject<C2SIM.Schema101.OrderBodyType>(e.Body);
 ...
-// If using v1.0.2
+// If using v1.0.2 - CWIX2024 version
 var orderObject = C2SIMSDK.ToC2SIMObject<C2SIM.Schema102.OrderBodyType>(e.Body);
 ```
 
