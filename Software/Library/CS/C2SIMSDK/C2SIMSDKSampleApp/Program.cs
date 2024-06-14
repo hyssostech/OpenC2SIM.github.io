@@ -23,6 +23,6 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         {
             services
                 .AddHostedService<C2SIMConsole>();
-            services.AddOptions<C2SIMSDKSettings>()
+            services.AddOptions<C2SIMConsoleSettings>()
                 .Bind(hostContext.Configuration.GetSection("C2SIM"));
         }); 

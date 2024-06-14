@@ -13,6 +13,7 @@ using C2SIM;
 /// Accepts:
 /// - Server commands:
 ///     STOP, RESET, INITIALIZE, SHARE, START, PAUSE, STATUS, QUERYINIT
+///     REPORT ON/OFF
 ///     MAGIC, RESTART, GETSIMMULT, SETSIMMULT, GETPLAYSTAT, PAUSEPLAY, 
 ///     STARTPLAY, STOPPLAY, GETPLAYMULT, SETPLAYMULT, STARTREC, STOPREC, 
 ///     GETRECSTAT, PAUSEREC, RESTARTREC
@@ -29,26 +30,32 @@ class C2SIMConsole : BackgroundService
     private static ILogger _logger { get; set; }
     private readonly IHostApplicationLifetime _appLifetime; 
     private IC2SIMSDK _c2SimSDK { get; }
-
+    private C2SIMConsoleSettings _options {get; set;}
+    
     /// <summary>
     /// Create a C2SIM console service object
     /// </summary>
     /// <param name="loggerFactory"></param>
     /// <param name="appLifetime"></param>
     /// <param name="c2SimSDK"></param>
-    public C2SIMConsole(ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IOptions<C2SIMSDKSettings> options)
+    public C2SIMConsole(ILoggerFactory loggerFactory, IHostApplicationLifetime appLifetime, IOptions<C2SIMConsoleSettings> options)
     {
         _logger = loggerFactory.CreateLogger(this.GetType());
         _appLifetime = appLifetime;
+        _options = options.Value;
 
         // Create object to interact with C2SIM and subscribe to events of interest
         _c2SimSDK = new C2SIMSDK(loggerFactory, options);
         _c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
         _c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
         _c2SimSDK.OderReceived += C2SimSDK_OderReceived;
-        _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
         _c2SimSDK.C2SIMMessageReceived += C2SimSDK_C2SIMMessageReceived;
         _c2SimSDK.Error += C2SimSDK_Error;
+        if (_options.DisplayReports.Equals("on", StringComparison.InvariantCultureIgnoreCase))
+        {
+            _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
+        }
+        Console.WriteLine($"Reports are {_options.DisplayReports}");
     }
 
     /// <summary>
@@ -118,6 +125,41 @@ class C2SIMConsole : BackgroundService
                         {
                             DisplayXml(resp);
                         }
+                    }
+                }
+                else if (cmd.StartsWith("report", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // Turn reporting on/off
+                    string[] tokens = cmd.Split(" ", System.StringSplitOptions.RemoveEmptyEntries);
+                    if (tokens.Length == 2)
+                    {
+                        if (tokens[1].Equals("on", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // Turn on if not already on
+                            if (!_options.DisplayReports.Equals("on", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                _options.DisplayReports = "ON";
+                                _c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
+                            };
+                        }
+                        else if (tokens[1].Equals("off", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // Turn off if not already off
+                            if (_options.DisplayReports.Equals("on", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                _options.DisplayReports = "OFF";
+                                _c2SimSDK.ReportReceived -= C2SimSDK_ReportReceived;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Report parameter should be ON or OFF");
+                        }
+                    }
+                    else
+                    {
+                        DisplayCommands();
+                        continue;
                     }
                 }
                 else
@@ -279,7 +321,7 @@ class C2SIMConsole : BackgroundService
         string msgType = parts[1].Trim();
         string path = parts[2].Trim();
         // Path may be in quotes
-        if (path.StartsWith("\"") && parts.Count() > 3)
+        if (path.StartsWith("\""))
         {
             // Append remaining parts - assume they are all part of the path
             for (int i = 3; i < parts.Count(); i++)
@@ -319,7 +361,7 @@ class C2SIMConsole : BackgroundService
     /// </summary>
     static void DisplayCommands()
     {
-        Console.WriteLine($"Commands: {string.Join(", ", Enum.GetNames(typeof(C2SIMSDK.C2SIMCommands))) + ", PUSH init|order|report <path to xml>, QUIT"}");
+        Console.WriteLine($"Commands: {string.Join(", ", Enum.GetNames(typeof(C2SIMSDK.C2SIMCommands))) + ", PUSH init|order|report <path to xml>, REPORTS ON/OFF, QUIT"}");
     }
 
     /// <summary>
