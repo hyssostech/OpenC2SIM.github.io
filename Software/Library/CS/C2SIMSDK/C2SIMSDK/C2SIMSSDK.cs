@@ -493,15 +493,26 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
             _logger?.LogError($"Error pushing message: {e}");
             throw;
         }
+        catch (InvalidOperationException e)
+        {
+            string msg = e.Message;
+            if (e.InnerException != null && e.InnerException is FormatException)
+            {
+                msg = $"Could not interpret server response: {e.Message}";
+                _logger.LogDebug(e.InnerException.ToString());
+            }
+            _logger?.LogError(msg);
+            throw new InvalidOperationException(msg, e);
+        }
     }
 
-    /// <summary>
-    /// Issue a command
-    /// </summary>
-    /// <param name="command"></param>
-    /// <param name="tokens">Parameter array</param>
-    /// <returns>Server response - formats vary depending on the command</returns>
-    /// <exception cref="C2SIMClientException"></exception>
+        /// <summary>
+        /// Issue a command
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="tokens">Parameter array</param>
+        /// <returns>Server response - formats vary depending on the command</returns>
+        /// <exception cref="C2SIMClientException"></exception>
     public async Task<string> PushCommand(C2SIMSDK.C2SIMCommands command, string[] tokens)
     {
         return await PushCommand(

@@ -1,5 +1,9 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.3.1
+* Improved reporting issued when there is an unexpected message returned from the server
+* Changed server response `time` property to string to accoomodate the 'nul' response returned by the server
+
 ## Version 1.3.0
 * Updated to CWIX2024 schema
 

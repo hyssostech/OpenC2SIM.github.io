@@ -44,7 +44,8 @@ public partial class C2SIMServerResponse
 
     private long msgNumberField;
 
-    private decimal timeField;
+    // Newer versions of the server may return "nul" literal, so cannot be decimal
+    private string timeField;
 
     private string collectResponseTimeField;
     #endregion
@@ -123,7 +124,7 @@ public partial class C2SIMServerResponse
     /// Execution time?
     /// </summary>
     [System.Xml.Serialization.XmlElementAttribute("time")]
-    public decimal Time { get => this.timeField; set => this.timeField = value; }
+    public string Time { get => this.timeField; set => this.timeField = value; }
 
     /// <summary>
     /// Indicates whether profiling/response times are bening collected - true if "T"

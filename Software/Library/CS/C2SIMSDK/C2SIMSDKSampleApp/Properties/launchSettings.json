@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "C2SIMSDKSampleApp": {
+      "commandName": "Project"
+    },
+    "JFTC": {
+      "commandName": "Project",
+      "commandLineArgs": "C2SIM:RestUrl=http://10.100.13.28:8080/C2SIMServer C2SIM:StompUrl=http://10.100.13.28:61613/topic/C2SIM"
+    },
+    "Lukasz at JFTC": {
+      "commandName": "Project",
+      "commandLineArgs": "C2SIM:RestUrl=http://10.255.4.23:8080/C2SIMServer C2SIM:StompUrl=http://10.255.4.23:61613/topic/C2SIM"
+    }
+  }
+}
