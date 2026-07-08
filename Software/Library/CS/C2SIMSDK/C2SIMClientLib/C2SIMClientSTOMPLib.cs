@@ -36,7 +36,7 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// <summary>
     /// Logger to use - injected during construction
     /// </summary>
-    private static ILogger _logger;
+    private ILogger _logger;
 
     /// <summary> 
     /// host - Name of STOMP host
@@ -79,21 +79,18 @@ public class C2SIMClientSTOMPLib : IDisposable
     /// </summary>
     private Task _messagePump;
     /// <summary>
-    /// STOP message queue
+    /// Incoming STOMP message queue
     /// </summary>
-    private static BufferBlock<C2SIMSTOMPMessage> _queue;
+    /// <remarks>
+    /// One queue per connection. This used to be a static shared by every instance in the
+    /// process, which meant a second client silently stole the first client's frames -
+    /// including its CONNECTED handshake response
+    /// </remarks>
+    private readonly BufferBlock<C2SIMSTOMPMessage> _queue;
     private bool _disposedValue;
     #endregion
 
     #region Construction / teardown
-    /// <summary>
-    /// There is only one queue (It is a static variable).  Initialize it in a static block
-    /// </summary>
-    static C2SIMClientSTOMPLib()
-    {
-        _queue = new BufferBlock<C2SIMSTOMPMessage>(); 
-    }
-
     /// <summary>
     /// Construct a library object
     /// </summary>
@@ -102,6 +99,8 @@ public class C2SIMClientSTOMPLib : IDisposable
     public C2SIMClientSTOMPLib(ILogger logger, C2SIMClientSTOMPSettings settings)
     {
         _logger = logger;
+
+        _queue = new BufferBlock<C2SIMSTOMPMessage>();
 
         _host = settings.Host;
         _port = Int32.Parse(settings.Port);
@@ -527,7 +526,7 @@ public class C2SIMClientSTOMPLib : IDisposable
         }
         // Disconnect was successful return OK
         _logger?.LogTrace("Disconnected");
-        IsConnected = true;
+        IsConnected = false;
         return "OK";
     }
     #endregion

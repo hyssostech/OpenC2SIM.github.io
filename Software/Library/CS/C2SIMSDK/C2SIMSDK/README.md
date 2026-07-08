@@ -64,7 +64,7 @@ As such, it should be compatible with Windows, macOs and Linux platforms, provid
     ```CS
     c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
     c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
-    c2SimSDK.OderReceived += C2SimSDK_OderReceived;
+    c2SimSDK.OrderReceived += C2SimSDK_OrderReceived;
     c2SimSDK.ReportReceived += C2SimSDK_ReportReceived;
     ```
 
@@ -166,8 +166,10 @@ Push messages and Notifications are expected to emply the following types respec
 * Notification event handlers are invoked by the SDK with XML representations of the message bodies provided as parameters:
     * `StatusChangedReceived` - `SystemCommandBodyType`
     * `InitializationReceived` - `C2SIMInitializationBodyType`
-    * `OderReceived` - `OrderBodyType`
+    * `ObjectInitializationReceived` - `ObjectInitializationBodyType`
+    * `OrderReceived` - `OrderBodyType` (`OderReceived` is a deprecated misspelling of this event)
     * `ReportReceived` - `ReportBodyType`
+    * An `Error` notification is issued when the STOMP message pump fails to process an incoming message
     * A generic `C2SIMMessageReceived` notification is issued for every message. The parameter contains the unparsed content of the received message body. If the Header indicates that the message is C2SIM-compliant (rather than say CBML or other format), then it can be deserialized using a `MessageBodyType` wrapper type
 
 For convenience, the following utility methods are provided to handle de/serialization:

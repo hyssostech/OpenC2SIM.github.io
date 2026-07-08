@@ -1,5 +1,17 @@
 # C2SIM SDK for .NET Release Notes
 
+## Version 1.4.0
+* Added a test project, `C2SIMSDK.Tests`. `dotnet test` runs it with no server needed; the live server tests are skipped unless `C2SIM_TEST_REST_URL` and `C2SIM_TEST_STOMP_URL` are set
+* Multiple `C2SIMSDK` instances can now coexist in one process. The underlying `C2SIMClientSTOMPLib` held its incoming message queue in a `static` field, so a second client stole the first client's frames and its `Connect()` failed with `Expected 'CONNECTED' but received MESSAGE`. Requires C2SIMClientLib v4.8.3.2
+* `IsConnected()` now returns false after `Disconnect()` - `C2SIMClientSTOMPLib.Disconnect()` was setting the flag to true
+* Added `ObjectInitializationReceived` event - `ObjectInitializationBody` messages were previously logged and dropped, and were only reachable via the raw `C2SIMMessageReceived` event
+* Added `OrderReceived` event. The misspelled `OderReceived` is now `[Obsolete]`, but is still raised alongside `OrderReceived` and will be removed in a future release
+* The `Error` event is now actually raised. Previously `OnError` had no call site, so failures in the STOMP message pump were logged but never surfaced to subscribers
+* The STOMP message pump now exits cleanly on cancellation instead of treating shutdown as an error
+* Fixed a `NullReferenceException` when disposing an SDK instance on which `Connect()` was never called
+* `C2SIMClientRESTLib`: `_protocol` and `_protocolVersion` are no longer `static`. `BmlRequest` reassigns `_protocol` on every call while `C2SIMSDK` constructs one instance per request, so a concurrent BML request could leave a C2SIM instance without its `C2SIMHeader`
+* `C2SIMClientRESTLib.GetElementValue`: removed the static document cache, which was keyed on `string.GetHashCode()` (a hash collision returned the wrong document) and was mutated from every requesting thread
+
 ## Version 1.3.1
 * Improved reporting issued when there is an unexpected message returned from the server
 * Changed server response `time` property to string to accoomodate the 'nul' response returned by the server

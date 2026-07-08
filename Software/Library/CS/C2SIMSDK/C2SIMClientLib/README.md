@@ -7,6 +7,28 @@ It provides methods for performing REST endpoint calls and interact with the STO
 
 Below the differences between the Java version and .NET's are described.
 
+## Versioning
+
+The first three components track the Java library / server generation being targeted. The fourth
+component is the .NET revision and is incremented independently when this port changes.
+The current version is recorded in [VERSION.md](VERSION.md) and is reported to the server as the
+`version` query string parameter of every REST call.
+
+### v4.8.3.2
+* `C2SIMClientSTOMPLib`: the incoming message queue (`_queue`) is no longer `static`. A single
+  `BufferBlock` was shared by every instance in the process, so a second client dequeued the first
+  client's frames. Two `C2SIMSDK` instances in one process could not both connect - the second
+  `Connect()` failed with `Expected 'CONNECTED' but received MESSAGE`, or messages were delivered
+  to the wrong client. `_logger` is likewise per-instance now
+* `C2SIMClientSTOMPLib.Disconnect()` set `IsConnected = true` on success. It now clears the flag,
+  so `IsConnected` and the reconnect path in `Connect()` behave correctly
+* `C2SIMClientRESTLib`: `_protocol` and `_protocolVersion` are no longer `static`. `BmlRequest` reassigns
+  `_protocol` on every call while callers construct one instance per request, so a concurrent BML request
+  could leave a C2SIM instance without its `C2SIMHeader`. `DetermineProtocol` is now an instance method
+* `C2SIMClientRESTLib.GetElementValue`: removed the static `XDocument` cache. It was keyed on
+  `string.GetHashCode()`, so a hash collision returned the wrong document, and the static was mutated
+  from every thread issuing a REST request
+
 ## Promises
 
 Promises are used throughout, to support the use of `async/await`.

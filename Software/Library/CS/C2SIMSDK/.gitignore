@@ -2,3 +2,5 @@
 **/obj/
 **/**.log
 .vs
+# dotnet test output: trx logs and --blame-hang crash dumps
+**/TestResults/

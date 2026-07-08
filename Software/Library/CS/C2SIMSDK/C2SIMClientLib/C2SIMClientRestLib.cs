@@ -22,11 +22,6 @@ namespace C2SimClientLib;
 /// </remarks>
 public class C2SIMClientRESTLib
 {
-    #region Static properties
-    private static string _protocol = string.Empty;   // C2SIM 
-    private static string _protocolVersion;
-    #endregion
-
     #region Constants
     const string SISOSTD = "SISO-STD-C2SIM";
     const string XML_PREAMBLE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -35,6 +30,12 @@ public class C2SIMClientRESTLib
     #region Instance variables
     private static ILogger _logger;
     private static string _clientVersion = string.Empty;
+    // These must be per-instance: BmlRequest() reassigns _protocol on every call, and
+    // C2SIMSDK constructs a new C2SIMClientRESTLib per request. As statics, a concurrent
+    // BmlRequest("BML") could leave _protocol != SISOSTD while another instance's
+    // constructor tests it, leaving that instance with a null _c2s header
+    private string _protocol = string.Empty;   // C2SIM
+    private string _protocolVersion;
     private string _host = "localhost";
     private string _port = "8080";
     private string _path = "C2SIMServer/c2sim";
@@ -42,9 +43,6 @@ public class C2SIMClientRESTLib
     private string _firstForwarders = string.Empty;   // C2SIM
     private string _domain;      // Not used any more.  Older client code may still set it
     private C2SIMHeader _c2s;
-
-    private static int _cachedXDocHash;
-    private static XDocument _cachedXDoc;
     #endregion
 
     #region Construction
@@ -336,13 +334,11 @@ public class C2SIMClientRESTLib
         }
         try
         {
-            int hash = xml.GetHashCode();
-            if (hash != _cachedXDocHash)
-            {
-                _cachedXDoc = XDocument.Parse(xml);
-                _cachedXDocHash = hash;
-            }
-            IEnumerable<XElement> result = _cachedXDoc?.Descendants().Where(p => p.Name.LocalName == target);
+            // Parsed on every call rather than cached: the previous static cache was keyed on
+            // xml.GetHashCode(), so a hash collision returned the wrong document, and the static
+            // was mutated from every thread that issued a REST request
+            XDocument xdoc = XDocument.Parse(xml);
+            IEnumerable<XElement> result = xdoc.Descendants().Where(p => p.Name.LocalName == target);
             return result?.First().Value ?? string.Empty;
         }
         catch (Exception)
@@ -441,7 +437,7 @@ public class C2SIMClientRESTLib
     /// </summary>
     /// <param name="xml"></param>
     /// <returns></returns>
-    static string DetermineProtocol(string xml)
+    string DetermineProtocol(string xml)
     {
         _logger?.LogTrace("Entering method");
         string temp = LocateXmlBody(xml);

@@ -104,11 +104,10 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
             if (disposing)
             {
                 // TODO: dispose managed state (managed objects)
-                if (_c2SimStompClient != null)
-                {
-                    _cancellationSource.Cancel();
-                    _c2SimStompClient.Dispose();
-                }
+                // _cancellationSource is only created by Connect(), so it is null
+                // when the object is disposed without ever having been connected
+                _cancellationSource?.Cancel();
+                _c2SimStompClient?.Dispose();
             }
 
             // TODO: free unmanaged resources (unmanaged objects) and override finalizer
@@ -204,7 +203,29 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.OrderBodyType&gt;(e.Body);
     /// </code>
     /// </remarks>
+    [Obsolete("Misspelled. Use OrderReceived instead. This member is raised in addition to OrderReceived and will be removed in a future release.")]
     public event EventHandler<C2SIMNotificationEventParams> OderReceived;
+
+    /// <summary>
+    /// Triggered when an Order message is received - provides serialized OrderBodyType content
+    /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized OrderBodyType. To deserialize:
+    /// <code>
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema100.OrderBodyType&gt;(e.Body);
+    /// var body = C2SIMSDK.ToC2SIMObject&lt;C2SIM.Schema101.OrderBodyType&gt;(e.Body);
+    /// </code>
+    /// </remarks>
+    public event EventHandler<C2SIMNotificationEventParams> OrderReceived;
+
+    /// <summary>
+    /// Triggered when an ObjectInitialization message is received - provides serialized ObjectInitializationBodyType content
+    /// </summary>
+    /// <remarks>
+    /// Event Body contains a serialized ObjectInitializationBodyType.
+    /// Used to supply objects - for example Routes - after the initial C2SIMInitializationBody has been shared.
+    /// </remarks>
+    public event EventHandler<C2SIMNotificationEventParams> ObjectInitializationReceived;
 
     /// <summary>
     /// Triggered when a Report message is received - provides serialized ReportBodyType content
@@ -632,6 +653,9 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                                 case "C2SIMInitializationBody":
                                     OnInitializationReceived(new C2SIMNotificationEventParams(header,bodyElement.ToString()));
                                     break;
+                                case "ObjectInitializationBody":
+                                    OnObjectInitializationReceived(new C2SIMNotificationEventParams(header, bodyElement.ToString()));
+                                    break;
                                 case "DomainMessageBody":
                                     // The actual body is the next node down
                                     bodyElement = bodyElement.FirstNode as XElement;
@@ -651,7 +675,8 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                                     }
                                     break;
                                 default:
-                                    // Ignore others - ObjectInitializationBody (IBML9?) and SystemAcknowledgementBody, perhaps others
+                                    // Ignore others - SystemAcknowledgementBody, perhaps others.
+                                    // Subscribe to C2SIMMessageReceived to see these.
                                     _logger?.LogInformation($"Ignoring C2SIM {bodyName ?? "empty name"} notification message");
                                     break;
                             }
@@ -664,9 +689,25 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
                         {
                             e = e.InnerException;
                         }
-                        // May result from message types we are not interested in, so just log
+                        // Shutdown is not an error - Disconnect()/Dispose() cancel the token
+                        if (e is OperationCanceledException || _cancellationSource.Token.IsCancellationRequested)
+                        {
+                            _logger?.LogTrace("STOMP message pump cancelled");
+                            break;
+                        }
+                        // May result from message types we are not interested in, so log ...
                         string emsg = $"Error processing notification {e.Message}";
                         _logger?.LogError(e, emsg);
+                        // ... and notify subscribers, who would otherwise have no way of learning
+                        // that the pump hit a problem. A throwing handler must not kill the pump.
+                        try
+                        {
+                            OnError(e);
+                        }
+                        catch (Exception handlerEx)
+                        {
+                            _logger?.LogError(handlerEx, $"Error handler threw {handlerEx.Message}");
+                        }
                     }
                 }
             }, _cancellationSource.Token);
@@ -902,7 +943,19 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     protected void OnOderReceived(C2SIMNotificationEventParams e)
     {
         _logger?.LogTrace("Entering method");
+#pragma warning disable CS0618 // Raise the deprecated, misspelled event for backwards compatibility
         OderReceived?.Invoke(this, e);
+#pragma warning restore CS0618
+        OrderReceived?.Invoke(this, e);
+    }
+
+    /// <summary>
+    /// ObjectInitialization message received
+    /// </summary>
+    protected void OnObjectInitializationReceived(C2SIMNotificationEventParams e)
+    {
+        _logger?.LogTrace("Entering method");
+        ObjectInitializationReceived?.Invoke(this, e);
     }
 
     /// <summary>

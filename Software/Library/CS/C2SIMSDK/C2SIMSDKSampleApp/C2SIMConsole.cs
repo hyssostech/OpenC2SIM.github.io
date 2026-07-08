@@ -48,7 +48,7 @@ class C2SIMConsole : BackgroundService
         _c2SimSDK = new C2SIMSDK(loggerFactory, options);
         _c2SimSDK.StatusChangedReceived += C2SimSDK_StatusChangedReceived;
         _c2SimSDK.InitializationReceived += C2SimSDK_InitializationReceived;
-        _c2SimSDK.OderReceived += C2SimSDK_OderReceived;
+        _c2SimSDK.OrderReceived += C2SimSDK_OrderReceived;
         _c2SimSDK.C2SIMMessageReceived += C2SimSDK_C2SIMMessageReceived;
         _c2SimSDK.Error += C2SimSDK_Error;
         if (_options.DisplayReports.Equals("on", StringComparison.InvariantCultureIgnoreCase))
@@ -248,7 +248,7 @@ class C2SIMConsole : BackgroundService
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    static void C2SimSDK_OderReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
+    static void C2SimSDK_OrderReceived(object sender, C2SIMSDK.C2SIMNotificationEventParams e)
     {
         // To serialize use the ToC2SIMObject<T> methods with the desired version of the schema (1.0.0, 1.0.1, 1.0.2)
         // var body = C2SIMSDK.ToC2SIMObject<C2SIM.Schema10X.OrderBodyType>(e.Body);

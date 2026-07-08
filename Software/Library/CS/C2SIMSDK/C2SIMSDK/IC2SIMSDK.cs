@@ -30,9 +30,18 @@ public interface IC2SIMSDK
     /// </summary>
     event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> InitializationReceived;
     /// <summary>
+    /// ObjectInitialization message received
+    /// </summary>
+    event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> ObjectInitializationReceived;
+    /// <summary>
     /// Order message received
     /// </summary>
+    [Obsolete("Misspelled. Use OrderReceived instead. This member is raised in addition to OrderReceived and will be removed in a future release.")]
     event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> OderReceived;
+    /// <summary>
+    /// Order message received
+    /// </summary>
+    event EventHandler<C2SIMSDK.C2SIMNotificationEventParams> OrderReceived;
     /// <summary>
     /// Report message received
     /// </summary>
