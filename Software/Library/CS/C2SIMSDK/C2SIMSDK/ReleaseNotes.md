@@ -11,6 +11,7 @@
 * Fixed a `NullReferenceException` when disposing an SDK instance on which `Connect()` was never called
 * `C2SIMClientRESTLib`: `_protocol` and `_protocolVersion` are no longer `static`. `BmlRequest` reassigns `_protocol` on every call while `C2SIMSDK` constructs one instance per request, so a concurrent BML request could leave a C2SIM instance without its `C2SIMHeader`
 * `C2SIMClientRESTLib.GetElementValue`: removed the static document cache, which was keyed on `string.GetHashCode()` (a hash collision returned the wrong document) and was mutated from every requesting thread
+* `C2SIMClientRESTLib`: uses one shared static `HttpClient` instead of creating and disposing one per call. The per-call client stranded a socket in TIME_WAIT on every request, exhausting the ephemeral port range (SocketException 10048) under high report volume. Accept headers are now set per-request, since a shared client's `DefaultRequestHeaders` are not thread-safe to mutate. Requires C2SIMClientLib v4.8.3.3
 
 ## Version 1.3.1
 * Improved reporting issued when there is an unexpected message returned from the server

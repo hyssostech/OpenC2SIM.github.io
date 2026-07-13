@@ -30,6 +30,19 @@ public class C2SIMClientRESTLib
     #region Instance variables
     private static ILogger _logger;
     private static string _clientVersion = string.Empty;
+#if NET5_0_OR_GREATER
+    // One shared client (was: new HttpClient() per call, which stranded a socket in
+    // TIME_WAIT per report push -> ephemeral-port exhaustion / SocketException 10048 at
+    // ~20x report volume). Accept headers are now PER-REQUEST (a shared client's
+    // DefaultRequestHeaders are not thread-safe to mutate). PooledConnectionLifetime keeps
+    // long-lived pooled connections from going stale.
+    private static readonly HttpClient _httpClient =
+        new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) });
+#else
+    // netstandard2.0: SocketsHttpHandler/PooledConnectionLifetime are unavailable; a plain
+    // shared client still fixes the exhaustion (connections are pooled and reused).
+    private static readonly HttpClient _httpClient = new HttpClient();
+#endif
     // These must be per-instance: BmlRequest() reassigns _protocol on every call, and
     // C2SIMSDK constructs a new C2SIMClientRESTLib per request. As statics, a concurrent
     // BmlRequest("BML") could leave _protocol != SISOSTD while another instance's
@@ -122,11 +135,14 @@ public class C2SIMClientRESTLib
         try
         {
             url = new Uri(BuildC2SIMEndpoint("status"));
-            using (HttpClient httpClient = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Get, url))
             {
-                httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("text/plain"));
-                result = await httpClient.GetStringAsync(url);
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                using (var resp = await _httpClient.SendAsync(request))
+                {
+                    resp.EnsureSuccessStatusCode();
+                    result = await resp.Content.ReadAsStringAsync();
+                }
             }
         }
         catch (HttpRequestException e)
@@ -366,14 +382,14 @@ public class C2SIMClientRESTLib
         {
             Uri url = new Uri(u);
             // Set up parameters to do a POST of the xml BML transaction
-            using (HttpClient httpClient = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Post, url))
             {
-                httpClient.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/xml"));
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
-                request.Content = new StringContent(xml, Encoding.UTF8, "application/xml");//CONTENT-TYPE header
-                HttpResponseMessage resp = await httpClient.SendAsync(request);
-                result = await resp.Content.ReadAsStringAsync();
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
+                request.Content = new StringContent(xml, Encoding.UTF8, "application/xml"); // CONTENT-TYPE
+                using (HttpResponseMessage resp = await _httpClient.SendAsync(request))
+                {
+                    result = await resp.Content.ReadAsStringAsync();
+                }
             }
         }
         catch (HttpRequestException e)
