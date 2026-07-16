@@ -1,6 +1,8 @@
 # C2SIM SDK for .NET Release Notes
 
 ## Version 1.4.0
+* Retargeted to `net10.0` and `netstandard2.0` (from the EOL `net6.0`). The `netstandard2.0` asset keeps the package usable from `net8.0` and other consumers
+* Inbound XML deserialization (`ToC2SIMObject<T>`) now tolerates empty leaf elements. Real producers (e.g. VR-Forces) emit empty elements such as `<OperationalStatusCode></OperationalStatusCode>` to mean "unspecified"; the strict `XmlSerializer` rejected these (`'' is not a valid value for OperationalStatusCodeType`), so a majority of real reports could not be parsed. Empty leaf elements (no attributes, no children, whitespace-only text) are now stripped before deserialization; populated values are untouched
 * Added a test project, `C2SIMSDK.Tests`. `dotnet test` runs it with no server needed; the live server tests are skipped unless `C2SIM_TEST_REST_URL` and `C2SIM_TEST_STOMP_URL` are set
 * Multiple `C2SIMSDK` instances can now coexist in one process. The underlying `C2SIMClientSTOMPLib` held its incoming message queue in a `static` field, so a second client stole the first client's frames and its `Connect()` failed with `Expected 'CONNECTED' but received MESSAGE`. Requires C2SIMClientLib v4.8.3.2
 * `IsConnected()` now returns false after `Disconnect()` - `C2SIMClientSTOMPLib.Disconnect()` was setting the flag to true
