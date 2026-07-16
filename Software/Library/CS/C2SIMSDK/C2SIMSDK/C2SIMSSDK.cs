@@ -835,20 +835,30 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Real C2SIM producers (notably VR-Forces) emit empty leaf elements such as
+    /// Real C2SIM producers (notably VR-Forces) emit empty elements such as
     /// <c>&lt;OperationalStatusCode&gt;&lt;/OperationalStatusCode&gt;</c> to mean "unspecified".
     /// <see cref="XmlSerializer"/> rejects these outright for enum- and numeric-typed elements
     /// (<c>'' is not a valid value for OperationalStatusCodeType</c>), so a majority of otherwise
-    /// valid reports fail to parse. This removes empty leaf elements - those with no attributes,
+    /// valid reports fail to parse. This removes empty elements - those with no attributes,
     /// no child elements, and whitespace-only or empty text - treating an empty element on the
     /// wire as absent/unspecified.
     /// </para>
     /// <para>
-    /// The removal is a single, non-cascading pass over the leaves present in the input: a
-    /// container element that becomes empty only because its own empty leaves were removed is
-    /// left in place (an empty container deserializes to a default-valued object, which does not
-    /// throw). Elements that carry a value - <c>&lt;OperationalStatusCode&gt;FullyOperational&lt;/OperationalStatusCode&gt;</c>,
+    /// The strip is <b>cascading</b> (run to a fixpoint): the pass repeats until it removes nothing,
+    /// so a container that becomes empty only because its own empty children were removed is itself
+    /// removed on the next pass, and a fully-empty subtree collapses entirely. For example
+    /// <c>&lt;OperationalStatus&gt;&lt;OperationalStatusCode/&gt;&lt;/OperationalStatus&gt;</c> vanishes
+    /// completely, so the parent property deserializes to null - an honest "unspecified" - rather than
+    /// to a phantom default-valued object (which, for an enum with no <c>Specified</c> companion, would
+    /// be a confident wrong value such as <c>FullyOperational</c> on an SA-relevant field). Elements that
+    /// carry a value - <c>&lt;OperationalStatusCode&gt;FullyOperational&lt;/OperationalStatusCode&gt;</c>,
     /// coordinates, UUIDs - are never touched, so populated data survives verbatim.
+    /// </para>
+    /// <para>
+    /// Known limitation: a <i>partially</i> empty container (an empty typed leaf alongside a populated
+    /// sibling) keeps the container, so a value-typed field with no <c>Specified</c> companion still
+    /// deserializes to its enum/numeric default. That cannot be fixed without schema-level changes; all
+    /// real-wire empty-status cases are the fully-empty form the cascade collapses.
     /// </para>
     /// <para>
     /// Sanitization operates on XML without an XML declaration - the form the SDK message pump
@@ -859,24 +869,32 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// </para>
     /// </remarks>
     /// <param name="xml">Inbound C2SIM XML</param>
-    /// <returns>XML with empty leaf elements removed, or the original text if it cannot be sanitized</returns>
+    /// <returns>XML with empty elements removed, or the original text if it cannot be sanitized</returns>
     private static string SanitizeInboundXml(string xml)
     {
         try
         {
             XElement root = XElement.Parse(xml);
-            // Snapshot the leaves first: removal is deliberately not cascaded to parents that
-            // become empty only after their empty children are removed
-            var emptyLeaves = root.DescendantsAndSelf()
-                .Where(e => e.Parent != null          // never remove the root element itself
-                         && !e.HasAttributes
-                         && !e.Elements().Any()
-                         && string.IsNullOrWhiteSpace(e.Value))
-                .ToList();
-            foreach (XElement e in emptyLeaves)
+            // Fixpoint: keep stripping empty leaves until a pass removes nothing. A container that
+            // becomes empty only after its empty children are removed is itself an empty leaf on the
+            // next pass, so a fully-empty subtree collapses to absent. Terminates because each pass
+            // that changes anything strictly shrinks a finite tree.
+            bool removedAny;
+            do
             {
-                e.Remove();
+                var emptyLeaves = root.DescendantsAndSelf()
+                    .Where(e => e.Parent != null          // never remove the root element itself
+                             && !e.HasAttributes
+                             && !e.Elements().Any()
+                             && string.IsNullOrWhiteSpace(e.Value))
+                    .ToList();
+                removedAny = emptyLeaves.Count > 0;
+                foreach (XElement e in emptyLeaves)
+                {
+                    e.Remove();
+                }
             }
+            while (removedAny);
             return root.ToString();
         }
         catch (System.Exception e)

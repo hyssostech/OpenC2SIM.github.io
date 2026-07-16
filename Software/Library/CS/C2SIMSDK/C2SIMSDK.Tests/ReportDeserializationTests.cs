@@ -64,6 +64,33 @@ public sealed class ReportDeserializationTests
     }
 
     /// <summary>
+    /// A fully empty status container on the wire
+    /// (<c>&lt;OperationalStatus&gt;&lt;OperationalStatusCode/&gt;&lt;/OperationalStatus&gt;</c>) must
+    /// deserialize as absent/unspecified - NOT as the enum default <c>FullyOperational</c>, which would
+    /// be a confident wrong answer on an SA-relevant field. Cascading sanitization removes the emptied
+    /// container entirely, so the parent property is null.
+    /// </summary>
+    [Fact]
+    public void Empty_status_container_is_unspecified_not_a_default_enum()
+    {
+        ReportBodyType report = C2SIMSDK.ToC2SIMObject<ReportBodyType>(Fixture("report-empty-status.xml"));
+
+        foreach (ReportContentType rc in report.ReportContent)
+        {
+            var p = (PositionReportContentType)rc.Item;
+            OperationalStatusType phantom = (p.EntityHealthStatus ?? Array.Empty<EntityHealthStatusType>())
+                .Select(h => h.Item).OfType<OperationalStatusType>().FirstOrDefault();
+            Assert.True(phantom is null,
+                "Expected no OperationalStatus (empty on the wire = unspecified), "
+                + $"but got OperationalStatusCode={phantom?.OperationalStatusCode}");
+        }
+
+        // Both EntityHealthStatus children of position 0 were fully empty on the wire, so the whole
+        // array collapses to absent rather than leaving phantom default-valued objects behind
+        Assert.Null(Position(report, 0).EntityHealthStatus);
+    }
+
+    /// <summary>
     /// A populated, NON-default enum must pass through untouched - proves sanitization strips only
     /// empty leaves and never rewrites a value. (The golden trace only ever carries FullyOperational,
     /// which is enum index 0, so a non-default value has to be exercised synthetically.)
