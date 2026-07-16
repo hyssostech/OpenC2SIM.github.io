@@ -799,6 +799,11 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
     /// <summary>
     /// Deserialize object T from xml string
     /// </summary>
+    /// <remarks>
+    /// The XML is pre-sanitized (see <see cref="SanitizeInboundXml"/>) so that empty leaf
+    /// elements real-world producers emit - e.g. <c>&lt;OperationalStatusCode&gt;&lt;/OperationalStatusCode&gt;</c> -
+    /// do not make the strict <see cref="XmlSerializer"/> reject an otherwise valid message.
+    /// </remarks>
     /// <typeparam name="T"></typeparam>
     /// <param name="xml"></param>
     /// <returns></returns>
@@ -812,7 +817,7 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
         try
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (TextReader reader = new StringReader(xml))
+            using (TextReader reader = new StringReader(SanitizeInboundXml(xml)))
             {
                 T obj = (T)serializer.Deserialize(reader);
                 return obj;
@@ -822,6 +827,63 @@ public class C2SIMSDK : IC2SIMSDK, IDisposable
         {
             _logger?.LogError($"Failed to deserialize xml to type {typeof(T).ToString()}: {e.Message}", e);
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Conservatively pre-sanitize inbound C2SIM XML before strict <see cref="XmlSerializer"/> deserialization.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Real C2SIM producers (notably VR-Forces) emit empty leaf elements such as
+    /// <c>&lt;OperationalStatusCode&gt;&lt;/OperationalStatusCode&gt;</c> to mean "unspecified".
+    /// <see cref="XmlSerializer"/> rejects these outright for enum- and numeric-typed elements
+    /// (<c>'' is not a valid value for OperationalStatusCodeType</c>), so a majority of otherwise
+    /// valid reports fail to parse. This removes empty leaf elements - those with no attributes,
+    /// no child elements, and whitespace-only or empty text - treating an empty element on the
+    /// wire as absent/unspecified.
+    /// </para>
+    /// <para>
+    /// The removal is a single, non-cascading pass over the leaves present in the input: a
+    /// container element that becomes empty only because its own empty leaves were removed is
+    /// left in place (an empty container deserializes to a default-valued object, which does not
+    /// throw). Elements that carry a value - <c>&lt;OperationalStatusCode&gt;FullyOperational&lt;/OperationalStatusCode&gt;</c>,
+    /// coordinates, UUIDs - are never touched, so populated data survives verbatim.
+    /// </para>
+    /// <para>
+    /// Sanitization operates on XML without an XML declaration - the form the SDK message pump
+    /// hands to the notification events and the form real wire reports arrive in. If the input
+    /// cannot be parsed as an <see cref="XElement"/> (for example a document that leads with an
+    /// <c>&lt;?xml ...?&gt;</c> declaration, as server command responses do), the original text
+    /// is returned unchanged so this can only ever help, never break a previously working path.
+    /// </para>
+    /// </remarks>
+    /// <param name="xml">Inbound C2SIM XML</param>
+    /// <returns>XML with empty leaf elements removed, or the original text if it cannot be sanitized</returns>
+    private static string SanitizeInboundXml(string xml)
+    {
+        try
+        {
+            XElement root = XElement.Parse(xml);
+            // Snapshot the leaves first: removal is deliberately not cascaded to parents that
+            // become empty only after their empty children are removed
+            var emptyLeaves = root.DescendantsAndSelf()
+                .Where(e => e.Parent != null          // never remove the root element itself
+                         && !e.HasAttributes
+                         && !e.Elements().Any()
+                         && string.IsNullOrWhiteSpace(e.Value))
+                .ToList();
+            foreach (XElement e in emptyLeaves)
+            {
+                e.Remove();
+            }
+            return root.ToString();
+        }
+        catch (System.Exception e)
+        {
+            // Fall back to the original text - sanitization must never make a working parse fail
+            _logger?.LogWarning($"Inbound XML sanitization skipped ({e.Message}); using raw XML");
+            return xml;
         }
     }
     #endregion

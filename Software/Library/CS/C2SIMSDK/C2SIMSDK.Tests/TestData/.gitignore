@@ -1,0 +1,3 @@
+# The captured trace below is a committed test fixture (see PROVENANCE.md), not runtime
+# output. Re-include it despite the repo-wide **/**.log ignore.
+!reports-captured_wire-xml.log
