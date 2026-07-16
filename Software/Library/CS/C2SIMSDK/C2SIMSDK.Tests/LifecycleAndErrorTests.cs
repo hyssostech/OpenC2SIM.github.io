@@ -1,4 +1,5 @@
 using C2SIM.Tests.Fakes;
+using C2SimClientLib;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
@@ -45,6 +46,33 @@ public sealed class LifecycleAndErrorTests
         // _cancellationSource.
         Exception ex = await Record.ExceptionAsync(() => sdk.Disconnect());
         Assert.IsNotType<NullReferenceException>(ex);
+    }
+
+    static C2SIMClientSTOMPSettings StompSettings() =>
+        new("127.0.0.1", "61613", "/topic/C2SIM");
+
+    /// <summary>
+    /// The charter's D9 gotcha pins the dispose-without-Connect NRE on the STOMP client's
+    /// Dispose (_networkStream / _client). Those are only assigned by Connect(), so disposing a
+    /// freshly constructed C2SIMClientSTOMPLib must not dereference them. Belt-and-suspenders for
+    /// the SDK-level Dispose_without_Connect_does_not_throw above.
+    /// </summary>
+    [Fact]
+    public void Stomp_client_dispose_without_Connect_does_not_throw()
+    {
+        var stomp = new C2SIMClientSTOMPLib(NullLogger.Instance, StompSettings());
+        Exception ex = Record.Exception(() => stomp.Dispose());
+        Assert.Null(ex);
+    }
+
+    /// <summary>Disposing the STOMP client twice, never connected, must stay a no-op.</summary>
+    [Fact]
+    public void Stomp_client_dispose_is_idempotent_without_Connect()
+    {
+        var stomp = new C2SIMClientSTOMPLib(NullLogger.Instance, StompSettings());
+        stomp.Dispose();
+        Exception ex = Record.Exception(() => stomp.Dispose());
+        Assert.Null(ex);
     }
 
     /// <summary>
